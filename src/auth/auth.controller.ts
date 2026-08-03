@@ -32,7 +32,8 @@ export class AuthController {
   async googleAuthRedirect(@Req() req: any, @Res() res: any) {
     const user = await this.authService.validateGoogleUser(req.user);
     const loginResult = await this.authService.login(user);
-    const frontendUrl = process.env.FRONTEND_URL || "https://eventory-pass-web.vercel.app";
+    const frontendUrl =
+      process.env.FRONTEND_URL || "https://eventory-pass-web.vercel.app";
 
     // Redirect to frontend callback page with JWT token and user info
     const token = encodeURIComponent(loginResult.accessToken);

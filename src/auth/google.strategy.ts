@@ -10,7 +10,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
         process.env.GOOGLE_CALLBACK_URL ||
-        "http://localhost:3001/api/v1/auth/google/callback",
+        "https://eventory-pass-api.vercel.app/api/v1/auth/google/callback",
       scope: ["email", "profile"],
     });
   }
