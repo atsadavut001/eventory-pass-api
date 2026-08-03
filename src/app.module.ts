@@ -23,7 +23,7 @@ import { Ticket } from "./bookings/entities/ticket.entity";
         type: "postgres",
         host: configService.get<string>(
           "DB_HOST",
-          "db.awxxbopzpdekkmfzjjrw.supabase.co",
+          "aws-0-ap-southeast-2.pooler.supabase.com",
         ),
         port: (() => {
           const envPort = configService.get<number>("DB_PORT");
@@ -32,7 +32,10 @@ import { Ticket } from "./bookings/entities/ticket.entity";
           }
           return envPort || 6543;
         })(),
-        username: configService.get<string>("DB_USER", "postgres"),
+        username: configService.get<string>(
+          "DB_USER",
+          "postgres.awxxbopzpdekkmfzjjrw",
+        ),
         password: configService.get<string>(
           "DB_PASSWORD",
           "eventory_pass_db_dev_001",
