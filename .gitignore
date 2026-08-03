@@ -6,6 +6,7 @@ dist/
 
 # Local environment files
 .env.dev
+.env.local
 .env
 *.env
 
