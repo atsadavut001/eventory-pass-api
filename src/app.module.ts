@@ -21,21 +21,36 @@ import { Ticket } from "./bookings/entities/ticket.entity";
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: "postgres",
-        host: configService.get<string>(
-          "DB_HOST",
-          "aws-0-ap-southeast-2.pooler.supabase.com",
-        ),
+        host: (() => {
+          const envHost = configService.get<string>(
+            "DB_HOST",
+            "aws-0-ap-southeast-2.pooler.supabase.com",
+          );
+          if (
+            process.env.VERCEL &&
+            envHost === "db.awxxbopzpdekkmfzjjrw.supabase.co"
+          ) {
+            return "aws-0-ap-southeast-2.pooler.supabase.com";
+          }
+          return envHost;
+        })(),
         port: (() => {
-          const envPort = configService.get<number>("DB_PORT");
+          const envPort = configService.get<number>("DB_PORT", 6543);
           if (process.env.VERCEL && envPort === 5432) {
             return 6543;
           }
-          return envPort || 6543;
+          return envPort;
         })(),
-        username: configService.get<string>(
-          "DB_USER",
-          "postgres.awxxbopzpdekkmfzjjrw",
-        ),
+        username: (() => {
+          const envUser = configService.get<string>(
+            "DB_USER",
+            "postgres.awxxbopzpdekkmfzjjrw",
+          );
+          if (process.env.VERCEL && envUser === "postgres") {
+            return "postgres.awxxbopzpdekkmfzjjrw";
+          }
+          return envUser;
+        })(),
         password: configService.get<string>(
           "DB_PASSWORD",
           "eventory_pass_db_dev_001",
