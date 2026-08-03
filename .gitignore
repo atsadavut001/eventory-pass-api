@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+
+# Local environment files
+.env.dev
+.env
+*.env
+
+# SQLite Database
+database.sqlite
+*.db
+*.sqlite
+*.sqlite-journal
+
+# Logs
+*.log
+npm-debug.log*
