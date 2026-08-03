@@ -10,7 +10,12 @@ async function bootstrap() {
 
   // Enable CORS for frontend integration
   app.enableCors({
-    origin: true, // Allow all origins for dev simplicity, or configure specific frontend URLs
+    origin: [
+      "https://eventory-pass-web.vercel.app",
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:5173",
+    ],
     credentials: true,
   });
 

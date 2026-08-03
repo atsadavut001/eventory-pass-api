@@ -5,28 +5,45 @@ import express from "express";
 import { ValidationPipe } from "@nestjs/common";
 
 const server = express();
+let bootstrapPromise: Promise<void> | null = null;
 
 export const bootstrap = async () => {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  if (!bootstrapPromise) {
+    bootstrapPromise = (async () => {
+      const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  app.setGlobalPrefix("api/v1");
+      app.setGlobalPrefix("api/v1");
 
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
+      app.enableCors({
+        origin: [
+          "https://eventory-pass-web.vercel.app",
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "http://localhost:5173",
+        ],
+        credentials: true,
+      });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
+      app.useGlobalPipes(
+        new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          transformOptions: { enableImplicitConversion: true },
+        }),
+      );
 
-  await app.init();
+      await app.init();
+    })().catch((err) => {
+      bootstrapPromise = null; // Allow retrying on subsequent requests
+      console.error("NestJS bootstrap failed:", err);
+      throw err;
+    });
+  }
+  return bootstrapPromise;
 };
 
-bootstrap();
+export default async (req: any, res: any) => {
+  await bootstrap();
+  server(req, res);
+};
 
-export default server;
