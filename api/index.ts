@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../src/app.module";
 import { ExpressAdapter } from "@nestjs/platform-express";
@@ -44,6 +45,11 @@ export const bootstrap = async () => {
 
 export default async (req: any, res: any) => {
   await bootstrap();
-  server(req, res);
+  return new Promise<void>((resolve, reject) => {
+    res.on("finish", () => resolve());
+    res.on("close", () => resolve());
+    res.on("error", (err: any) => reject(err));
+    server(req, res);
+  });
 };
 
