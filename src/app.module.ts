@@ -25,7 +25,7 @@ import { Ticket } from "./bookings/entities/ticket.entity";
           "DB_HOST",
           "db.awxxbopzpdekkmfzjjrw.supabase.co",
         ),
-        port: configService.get<number>("DB_PORT", 5432),
+        port: configService.get<number>("DB_PORT", 6543),
         username: configService.get<string>("DB_USER", "postgres"),
         password: configService.get<string>(
           "DB_PASSWORD",
