@@ -25,7 +25,13 @@ import { Ticket } from "./bookings/entities/ticket.entity";
           "DB_HOST",
           "db.awxxbopzpdekkmfzjjrw.supabase.co",
         ),
-        port: configService.get<number>("DB_PORT", 6543),
+        port: (() => {
+          const envPort = configService.get<number>("DB_PORT");
+          if (process.env.VERCEL && envPort === 5432) {
+            return 6543;
+          }
+          return envPort || 6543;
+        })(),
         username: configService.get<string>("DB_USER", "postgres"),
         password: configService.get<string>(
           "DB_PASSWORD",
